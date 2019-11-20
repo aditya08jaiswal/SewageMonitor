@@ -1,0 +1,37 @@
+package com.vysiontech.sewagemonitor;
+
+import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class ChooseCityActivity extends AppCompatActivity {
+
+    private Button mLucknow,mJodhpur;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_city);
+        mLucknow=findViewById(R.id.Choose_Lucknow);
+        mJodhpur=findViewById(R.id.Choose_Jodhpur);
+
+        mLucknow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin1=new Intent(ChooseCityActivity.this,LoginActivity.class);
+                toLogin1.putExtra("email","lucknow_lmc@gmail.com");
+                startActivity(toLogin1);
+            }
+        });
+
+        mJodhpur.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin2=new Intent(ChooseCityActivity.this,LoginActivity.class);
+                toLogin2.putExtra("email","jodhpur_jmc@gmail.com");
+                startActivity(toLogin2);
+            }
+        });
+    }
+}

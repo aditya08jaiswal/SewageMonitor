@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChooseCityActivity"
+    android:background="@color/colorPrimaryDark">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Choose Your City"
+        android:textColor="#ffffff"
+        android:textSize="40sp"
+        android:id="@+id/choose_city"
+        android:layout_centerHorizontal="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/choose_city"
+        android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:id="@+id/linear1"
+        android:padding="8dp"
+        >
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="LUCKNOW"
+            android:textColor="#ffffff"
+            android:id="@+id/Choose_Lucknow"
+
+            />
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            android:text="JODHPUR"
+            android:textColor="#ffffff"
+            android:id="@+id/Choose_Jodhpur"
+            android:layout_marginStart="100dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear1"
+        android:padding="8dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:id="@+id/linear2"
+        >
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="SURAT"
+            android:textColor="#ffffff"
+            android:id="@+id/Choose_Surat"
+            />
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            android:text="VARANASI"
+            android:textColor="#ffffff"
+            android:id="@+id/Choose_Varanasi"
+            android:layout_marginStart="100dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear2"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:id="@+id/linear3"
+        >
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="MUMBAI"
+            android:textColor="#ffffff"
+            android:id="@+id/Choose_Mumbai"
+            />
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
+            android:text="PRAYAGRAJ"
+            android:textColor="#ffffff"
+            android:id="@+id/Choose_prayagraj"
+            android:layout_marginStart="95dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

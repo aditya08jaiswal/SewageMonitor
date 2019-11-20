@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "981372242229",
+    "firebase_url": "https://sewagemonitor.firebaseio.com",
+    "project_id": "sewagemonitor",
+    "storage_bucket": "sewagemonitor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981372242229:android:3725554e44a929f1f9e47c",
+        "android_client_info": {
+          "package_name": "com.vysiontech.sewagemonitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981372242229-h4abdrkj73dk7irg3fm9glh5lmbr4iea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0A-bvSTYKR7L0TDgDqJp8vBK1qnRmOg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981372242229-h4abdrkj73dk7irg3fm9glh5lmbr4iea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
