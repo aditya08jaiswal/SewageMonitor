@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/nav_Home"
+            android:icon="@drawable/ic_home_black"
+            android:title="Home"/>
+        <item android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_sms_black_24dp"
+            android:title="Full statistics"/>
+        <item android:id="@+id/nav_critical"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="location of critical sewers"/>
+        <item android:id="@+id/nav_informative"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="location of informative sewers"/>
+        <item android:id="@+id/nav_normal"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="location of normal sewers "/>
+        <item android:id="@+id/nav_ground"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="location of ground sewers "/>
+        <item android:id="@+id/nav_status"
+            android:icon="@drawable/ic_battery_80_black_24dp"
+            android:title="Battery Status "/>
+
+
+    </group>
+
+
+</menu>

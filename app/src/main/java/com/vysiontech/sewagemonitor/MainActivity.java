@@ -3,21 +3,106 @@ package com.vysiontech.sewagemonitor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ListView mListView;
+    private ArrayList<String> arrayList=new ArrayList<>();
+    private DatabaseReference mDbRef;
+    private FirebaseUser mAuthUser;
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mToolbar=findViewById(R.id.main_appbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Select Zone");
 
+        mListView=findViewById(R.id.zone_list);
         mAuth=FirebaseAuth.getInstance();
+
+        mAuthUser=mAuth.getCurrentUser();
+       if(mAuthUser!=null){
+        String uid=mAuthUser.getUid();
+        Log.d("current uid",uid);
+
+        final ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1,arrayList);
+        mListView.setAdapter(arrayAdapter);
+
+        mDbRef= FirebaseDatabase.getInstance().getReference().child(uid);
+        mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+
+                    arrayList.add(ds.getKey());
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+             mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                     int counter=0;
+                   for(DataSnapshot ds:dataSnapshot.getChildren()){
+                       if(position==counter)
+                       {
+                           String zone_name=ds.getKey();
+                           Intent toFragment=new Intent(MainActivity.this,MapsActivity.class);
+                           toFragment.putExtra("zone_name",zone_name);
+                           startActivity(toFragment);
+                           finish();
+
+                       }
+                       else {
+                           counter++;
+                       }
+                   }
+
+                 }
+
+                 @Override
+                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                 }
+             });
+            }
+        });
+
+       }
 
     }
 
@@ -29,5 +114,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this,ChooseCityActivity.class));
             finish();
         }
+
     }
 }

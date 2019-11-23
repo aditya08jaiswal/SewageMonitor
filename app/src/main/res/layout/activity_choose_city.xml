@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ChooseCityActivity"
     android:background="@color/colorPrimaryDark">
+    <include layout="@layout/app_bar_layout" android:id="@+id/choose_city_appbar"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +16,7 @@
         android:textSize="40sp"
         android:id="@+id/choose_city"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/choose_city_appbar"
         />
     <LinearLayout
         android:layout_width="match_parent"

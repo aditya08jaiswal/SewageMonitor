@@ -7,6 +7,7 @@
     tools:context=".LoginActivity"
     android:background="@color/colorPrimaryDark">
 
+    <include layout="@layout/app_bar_layout" android:id="@+id/login_appbar"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,6 +19,7 @@
         android:id="@+id/Select"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_below="@+id/login_appbar"
         />
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/login_email_id"
