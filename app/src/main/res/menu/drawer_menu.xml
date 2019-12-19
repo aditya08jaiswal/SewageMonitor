@@ -6,25 +6,25 @@
 
         <item android:id="@+id/nav_Home"
             android:icon="@drawable/ic_home_black"
-            android:title="Home"/>
+            android:title="@string/drawer_home"/>
         <item android:id="@+id/nav_statistics"
             android:icon="@drawable/ic_sms_black_24dp"
-            android:title="Full statistics"/>
+            android:title="@string/drawer_statistics"/>
         <item android:id="@+id/nav_critical"
             android:icon="@drawable/ic_location_on_black_24dp"
-            android:title="location of critical sewers"/>
+            android:title="@string/drawer_critical"/>
         <item android:id="@+id/nav_informative"
             android:icon="@drawable/ic_location_on_black_24dp"
-            android:title="location of informative sewers"/>
+            android:title="@string/drawer_informative"/>
         <item android:id="@+id/nav_normal"
             android:icon="@drawable/ic_location_on_black_24dp"
-            android:title="location of normal sewers "/>
+            android:title="@string/drawer_normal"/>
         <item android:id="@+id/nav_ground"
             android:icon="@drawable/ic_location_on_black_24dp"
-            android:title="location of ground sewers "/>
+            android:title="@string/drawer_ground"/>
         <item android:id="@+id/nav_status"
             android:icon="@drawable/ic_battery_80_black_24dp"
-            android:title="Battery Status "/>
+            android:title="@string/drawer_battery"/>
 
 
     </group>

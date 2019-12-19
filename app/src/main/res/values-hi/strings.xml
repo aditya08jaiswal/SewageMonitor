@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sewage Monitor</string>
+    <string name="title_activity_maps">होम</string>
+    <string name="navigation_drawer_open">खुला नेविगेशन दराज</string>
+    <string name="navigation_drawer_close">करीब नेविगेशन दराज</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="loading">लोड हो रहा है</string>
+    <string name="normal">सामान्य स्थिति में सीवर:</string>
+    <string name="informative">सूचनात्मक स्थिति में सीवर:</string>
+    <string name="critical">गंभीर हालत में सीवर:</string>
+    <string name="ground">जमीनी हालत में सीवर:</string>
+    <string name="title_home">होम</string>
+    <string name="title_statistics">आंकड़े</string>
+    <string name="title_critical">क्रिटिकल सीवर</string>
+    <string name="title_informative">जानकारीपूर्ण सीवर</string>
+    <string name="title_normal">सामान्य सीवर</string>
+    <string name="title_ground">ग्राउंड सीवर</string>
+    <string name="title_battery">बैटरी की स्थिति</string>
+    <string name="nav_header_title">सीवेज मॉनिटर</string>
+    <string name="nav_header_subtitle">Vysion limited</string>
+
+    <string name="drawer_home">होम</string>
+    <string name="drawer_statistics">पूर्ण आँकड़े</string>
+    <string name="drawer_critical">महत्वपूर्ण सीवरों का स्थान</string>
+    <string name="drawer_informative">जानकारीपूर्ण सीवरों का स्थान</string>
+    <string name="drawer_normal">सामान्य सीवरों का स्थान</string>
+    <string name="drawer_ground">ग्राउंड सीवर का स्थान</string>
+    <string name="drawer_battery">बैटरी की स्थिति</string>
+    <string name="title_selectZone">ज़ोन का चयन करें</string>
+    <string name="Ranikhet">रानीखेत</string>
+    <string name="Sardarpura">सरदारपुरा</string>
+</resources>

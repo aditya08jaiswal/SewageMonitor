@@ -30,11 +30,15 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="70dp"
         android:textColorHint="#ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter City Email"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
 
             />
     </com.google.android.material.textfield.TextInputLayout>
@@ -48,11 +52,15 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="50dp"
         android:textColorHint="#ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"/>
+            android:hint="Password"
+            android:textColor="#ffffff"
+            android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
