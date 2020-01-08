@@ -22,7 +22,7 @@
         android:layout_below="@+id/login_appbar"
         />
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_email_id"
+        android:id="@+id/nameOfUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Select"
@@ -32,6 +32,31 @@
         android:textColorHint="#ffffff"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Enter your name"
+            android:inputType="textPersonName"
+            android:textColor="#ffffff"
+
+
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/login_email_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameOfUser"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="50dp"
+        android:textColorHint="#ffffff"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+
         >
         <EditText
             android:layout_width="match_parent"
@@ -69,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_password_id"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:text="LOGIN"
         android:textSize="15sp"

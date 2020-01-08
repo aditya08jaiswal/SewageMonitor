@@ -3,8 +3,12 @@ package com.vysiontech.sewagemonitor;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +38,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.vysiontech.sewagemonitor.Helper.LocaleHelper;
 
+import java.util.Locale;
+
 import io.paperdb.Paper;
 
 
@@ -49,7 +55,9 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private Toolbar mtoolbar;
     private String zone_name;
-    private Bundle bundle;
+    private Bundle bundle,dupInstanceState;
+    DatabaseHelper myDbRef;
+    String state="Home";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -62,6 +70,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_maps);
         mtoolbar = findViewById(R.id.map_appbar);
         setSupportActionBar(mtoolbar);
+
         string1 = findViewById(R.id.textView3);
         string2 = findViewById(R.id.textView4);
         string3 = findViewById(R.id.textView5);
@@ -69,32 +78,39 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         zone_name=getIntent().getStringExtra("zone_name");
         bundle = new Bundle();
         bundle.putString("zone_name",zone_name);
+        myDbRef=new DatabaseHelper(this);
 
+        defaultLanguageSetting();
+        addToken();
+        NavigationView navigationView=NavigationBar();
 
-        Paper.init(this);
+        if (savedInstanceState == null) {
+            home Home=new home();
+            Home.setArguments(bundle);
+            UpdateTitle((String)Paper.book().read("language"),"title_home");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Home).commit();
+            navigationView.setCheckedItem(R.id.nav_Home);
+        }
+        else
+        {
+            SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(this);
+            String pref=preferences.getString("State",state);
+            Log.d("preferance",pref);
+            if(pref.equals("title_home")){
+                home Home=new home();
+                Home.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Home).commit();
+                navigationView.setCheckedItem(R.id.nav_Home);
+            }
+            UpdateTitle((String)Paper.book().read("language"),pref);
+        }
 
-        String language=Paper.book().read("language");
-        if(language==null)
-            Paper.book().write("language","hi");
+        monitor();
+    }
 
-        UpdateView((String)Paper.book().read("language"));
-        UpdateTitle((String)Paper.book().read("language"),"title_home");
+    NavigationView NavigationBar(){
 
         drawer = findViewById(R.id.drawer_layout);
-
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String newToken = instanceIdResult.getToken();
-                Log.e("newToken", newToken);
-                mRef = FirebaseDatabase.getInstance().getReference().child("token").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                mRef.child(zone_name).child("Id").setValue(newToken);
-            }
-        });
-
-
-
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,drawer,mtoolbar,R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
@@ -104,35 +120,151 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        if (savedInstanceState == null) {
-            home Home=new home();
-            Home.setArguments(bundle);
-            UpdateTitle((String)Paper.book().read("language"),"title_home");
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Home).commit();
-            navigationView.setCheckedItem(R.id.nav_Home);
-        }else {
-            if(savedInstanceState.equals(new statistics()))
-            UpdateTitle((String)Paper.book().read("language"),"title_statistics");
-            else if(savedInstanceState.equals(new critical()))
-                UpdateTitle((String)Paper.book().read("language"),"title_critical");
-            else if(savedInstanceState.equals(new normal()))
-                UpdateTitle((String)Paper.book().read("language"),"title_normal");
-            else if(savedInstanceState.equals(new informative()))
-                UpdateTitle((String)Paper.book().read("language"),"title_informative");
-            else if(savedInstanceState.equals(new ground()))
-                UpdateTitle((String)Paper.book().read("language"),"title_ground");
-            else if(savedInstanceState.equals(new home()))
-                UpdateTitle((String)Paper.book().read("language"),"title_home");
-            else if(savedInstanceState.equals(new battery_list()))
-                UpdateTitle((String)Paper.book().read("language"),"title_battery");
-
-        }
-
-        monitor();
+        return navigationView;
     }
 
+    void defaultLanguageSetting(){
+        Paper.init(this);
 
+        String language=Paper.book().read("language");
+        if(language==null)
+            Paper.book().write("language","hi");
+
+        UpdateView((String)Paper.book().read("language"));
+        UpdateTitle((String)Paper.book().read("language"),"title_home");
+
+    }
+
+    void addToken(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.e("newToken", newToken);
+                Cursor res=myDbRef.getData();
+                if(res.getCount()==0){
+                    Log.d("Error in geeting data","error fetching data");
+                }
+                while (res.moveToNext())
+                {
+                    String nameOfUser=res.getString(1);
+                    Log.d("nameOfUser",nameOfUser);
+
+                    mRef = FirebaseDatabase.getInstance().getReference().child("token").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(zone_name);
+                    mRef.child(nameOfUser).child("Id").setValue(newToken);
+                }
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        String state="";
+        String languageCheck=(String)Paper.book().read("language");
+        if(item.getItemId()==R.id.language_en&&languageCheck.equals("hi")){
+
+
+            Paper.book().write("language","en");
+            UpdateView((String)Paper.book().read("language"));
+            CharSequence s=mtoolbar.getTitle();
+            String title=s.toString().trim();
+
+            switch (title){
+                case "होम":
+                    UpdateTitle((String)Paper.book().read("language"),"title_home");
+                    state="title_home";
+                    break;
+                case "सामान्य सीवर":
+                    UpdateTitle((String)Paper.book().read("language"),"title_normal");
+                    state="title_normal";
+                    break;
+                case "जानकारीपूर्ण सीवर":
+                    UpdateTitle((String)Paper.book().read("language"),"title_informative");
+                    state="title_informative";
+                    break;
+                case "क्रिटिकल सीवर":
+                    UpdateTitle((String)Paper.book().read("language"),"title_critical");
+                    state="title_critical";
+                    break;
+                case "ग्राउंड सीवर":
+                    UpdateTitle((String)Paper.book().read("language"),"title_ground");
+                    state="title_ground";
+                    break;
+                case "आंकड़े":
+                    UpdateTitle((String)Paper.book().read("language"),"title_statistics");
+                    state="title_statistics";
+                    break;
+                case "बैटरी की स्थिति":
+                    UpdateTitle((String)Paper.book().read("language"),"title_battery");
+                    state="title_battery";
+                    break;
+
+            }
+
+            SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor= preferences.edit();
+            editor.putString("State",state);
+            editor.apply();
+            recreate();
+
+        }
+        if(item.getItemId()==R.id.language_hi&&languageCheck.equals("en")){
+
+
+            Paper.book().write("language","hi");
+            UpdateView((String)Paper.book().read("language"));
+            CharSequence s=mtoolbar.getTitle();
+            String title=s.toString().trim();
+            switch (title){
+                case "Home":
+                    UpdateTitle((String)Paper.book().read("language"),"title_home");
+                    state="title_home";
+                    break;
+                case "Normal Sewers":
+                    UpdateTitle((String)Paper.book().read("language"),"title_normal");
+                    state="title_normal";
+                    break;
+                case "Informative Sewers":
+                    UpdateTitle((String)Paper.book().read("language"),"title_informative");
+                    state="title_informative";
+                    break;
+                case "Critical Sewers":
+                    UpdateTitle((String)Paper.book().read("language"),"title_critical");
+                    state="title_critical";
+                    break;
+                case "Ground Sewers":
+                    UpdateTitle((String)Paper.book().read("language"),"title_ground");
+                    state="title_ground";
+                    break;
+                case "Statistics":
+                    UpdateTitle((String)Paper.book().read("language"),"title_statistics");
+                    state="title_statistics";
+                    break;
+                case "Battery Status":
+                    UpdateTitle((String)Paper.book().read("language"),"title_battery");
+                    state="title_battery";
+                    break;
+            }
+            SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor= preferences.edit();
+            editor.putString("State",state);
+            editor.apply();
+            recreate();
+
+        }
+        return true;
+    }
 
     public void monitor() {
         user = new UserActivity();
@@ -180,6 +312,8 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         });
 
     }
+
+
     private void UpdateView(String language) {
 
         Context context=LocaleHelper.setLocale(this,language);
@@ -225,85 +359,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        if(item.getItemId()==R.id.language_en){
-            recreate();
-            Paper.book().write("language","en");
-            UpdateView((String)Paper.book().read("language"));
-            CharSequence s=mtoolbar.getTitle();
-            String title=s.toString().trim();
-
-            switch (title){
-                case "होम":
-                    UpdateTitle((String)Paper.book().read("language"),"title_home");
-                    break;
-                case "सामान्य सीवर":
-                    UpdateTitle((String)Paper.book().read("language"),"title_normal");
-                    break;
-                case "जानकारीपूर्ण सीवर":
-                    UpdateTitle((String)Paper.book().read("language"),"title_informative");
-                    break;
-                case "क्रिटिकल सीवर":
-                    UpdateTitle((String)Paper.book().read("language"),"title_critical");
-                    break;
-                case "ग्राउंड सीवर":
-                    UpdateTitle((String)Paper.book().read("language"),"title_ground");
-                    break;
-                case "आंकड़े":
-                    UpdateTitle((String)Paper.book().read("language"),"title_statistics");
-                    break;
-                case "बैटरी की स्थिति":
-                    UpdateTitle((String)Paper.book().read("language"),"title_battery");
-                    break;
-
-            }
-
-
-        }
-        if(item.getItemId()==R.id.language_hi){
-            recreate();
-            Paper.book().write("language","hi");
-            UpdateView((String)Paper.book().read("language"));
-
-            CharSequence s=mtoolbar.getTitle();
-            String title=s.toString().trim();
-            switch (title){
-                case "Home":
-                    UpdateTitle((String)Paper.book().read("language"),"title_home");
-                    break;
-                case "Normal Sewers":
-                    UpdateTitle((String)Paper.book().read("language"),"title_normal");
-                    break;
-                case "Informative Sewers":
-                    UpdateTitle((String)Paper.book().read("language"),"title_informative");
-                    break;
-                case "Critical Sewers":
-                    UpdateTitle((String)Paper.book().read("language"),"title_critical");
-                    break;
-                case "Ground Sewers":
-                    UpdateTitle((String)Paper.book().read("language"),"title_ground");
-                    break;
-                case "Statistics":
-                    UpdateTitle((String)Paper.book().read("language"),"title_statistics");
-                    break;
-                case "Battery Status":
-                    UpdateTitle((String)Paper.book().read("language"),"title_battery");
-                    break;
-            }
-
-
-        }
-        return true;
-    }
 
     @Override
     public void onBackPressed() {

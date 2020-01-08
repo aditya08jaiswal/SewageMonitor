@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -27,10 +29,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputLayout mCityemail;
     private TextInputLayout mCityPassword;
+    private TextInputLayout mUserName;
     private Button mlogin;
     private FirebaseAuth mAuth;
     private ProgressDialog mProgress;
     private Toolbar mToolbar;
+    DatabaseHelper mDbRef;
     String city;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +54,22 @@ public class LoginActivity extends AppCompatActivity {
         mCityemail=findViewById(R.id.login_email_id);
         mCityPassword=findViewById(R.id.login_password_id);
         mlogin=findViewById(R.id.login_btn);
+        mUserName=findViewById(R.id.nameOfUser);
+        mDbRef=new DatabaseHelper(this);
 
         mlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = mCityemail.getEditText().getText().toString();
                 String password = mCityPassword.getEditText().getText().toString();
+                String UserName=mUserName.getEditText().getText().toString();
                 if (email.equals(emailStr)){
                     if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)) {
                         mProgress.setTitle("Logging In");
                         mProgress.setMessage("Please Wait while we check your credentials");
                         mProgress.setCanceledOnTouchOutside(false);
                         mProgress.show();
-                        loginUser(email, password);
+                        loginUser(UserName,email, password);
                     }
                 }else {
                     Toast.makeText(LoginActivity.this,"Enter Selected City Email",Toast.LENGTH_SHORT).show();
@@ -70,12 +77,18 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
-            private void loginUser(String email,String password) {
+            private void loginUser(final String UserName, String email, String password) {
                 mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             mProgress.dismiss();
+                            boolean isInserted=mDbRef.addNAme(UserName);
+                            if(isInserted==true)
+                                Log.d("Inserted successfully","inserted");
+                            else
+                                Log.d("Not Inserted","not inserted");
+
                             Intent toZone=new Intent(LoginActivity.this,MainActivity.class);
                             toZone.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(toZone);

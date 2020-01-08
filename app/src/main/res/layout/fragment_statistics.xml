@@ -3,16 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".normal">
+    tools:context=".normal"
+    android:background="@drawable/purplegraph"
+    >
 
     <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
 
-    <TextView
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="statistics"
-        android:textSize="34sp"
+        android:text="Click to get Statistics"
+        android:textSize="21sp"
+        android:id="@+id/Statistics_button"
         android:layout_centerInParent="true"
-        />
+        android:padding="18dp"
 
+        />
+    </RelativeLayout>
 </FrameLayout>
